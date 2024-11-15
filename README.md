@@ -10,6 +10,7 @@ Instalasi:
 - Setelah program berhasil dijalankan silahkan buka software postman atau yang serupa
   
 Penggunaan:
+
 Autentikasi: Untuk menjalankan fitur CRUD Air Polution memerlukan token.
 - Ketik http://localhost:8000/api/auth/login pada bagian url
 - Ubah method di sebelah kiri url menjadi POST
