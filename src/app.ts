@@ -9,6 +9,7 @@ import express, {
 } from "express";
 import { PORT } from "./config";
 import { AirPolutionRouter } from "./routers/airPolution.router";
+import { AuthRouter } from "./routers/auth.router";
 
 export default class App {
   public app: Express;
@@ -27,7 +28,6 @@ export default class App {
   }
 
   private handleError(): void {
-    // not found
     this.app.use((req: Request, res: Response, next: NextFunction) => {
       if (req.path.includes("/api/")) {
         res.status(404).send("Not found !");
@@ -36,7 +36,6 @@ export default class App {
       }
     });
 
-    // error
     this.app.use(
       (err: Error, req: Request, res: Response, next: NextFunction) => {
         if (req.path.includes("/api/")) {
@@ -50,12 +49,14 @@ export default class App {
   }
 
   private routes(): void {
+    const authRouter = new AuthRouter();
     const airPolutionRouter = new AirPolutionRouter();
 
     this.app.get("/api", (req: Request, res: Response) => {
       res.send(`Hello, Welcome to cetta test API!`);
     });
 
+    this.app.use("/api/auth", authRouter.getRouter());
     this.app.use("/api/air-polution", airPolutionRouter.getRouter());
   }
 

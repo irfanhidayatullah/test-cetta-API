@@ -1,5 +1,6 @@
 import { createAirPolutionService } from "@/services/airPolution/create-airPolution.service";
 import { deleteAirPolutionService } from "@/services/airPolution/delete-airPolution.service";
+import { getAirPolutionService } from "@/services/airPolution/get-airPolution.service";
 import { getAllAirPolutionsService } from "@/services/airPolution/get-all-airPolution.service";
 import { updateAirPolutionsService } from "@/services/airPolution/update-airPolution.service";
 import { NextFunction, Request, Response } from "express";
@@ -24,13 +25,28 @@ export class AirPolutionController {
       next(error);
     }
   }
+  async getAirPolutionByIdController(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const result = await getAirPolutionService(Number(req.params.id));
+      return res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
   async deleteAirPolutionController(
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const result = await deleteAirPolutionService(Number(req.params.id));
+      const result = await deleteAirPolutionService(
+        Number(req.params.id),
+        Number(res.locals.user.id)
+      );
       return res
         .status(200)
         .send({ message: "Delete air polution success", result });
@@ -44,7 +60,10 @@ export class AirPolutionController {
     next: NextFunction
   ) {
     try {
-      const result = await createAirPolutionService(req.body);
+      const result = await createAirPolutionService(
+        req.body,
+        Number(res.locals.user.id)
+      );
       return res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -59,6 +78,7 @@ export class AirPolutionController {
     try {
       const result = await updateAirPolutionsService(
         Number(req.params.id),
+        Number(res.locals.user.id),
         req.body
       );
       return res.status(200).send(result);

@@ -3,6 +3,7 @@ import { AirPolutionData } from "@prisma/client";
 
 export const updateAirPolutionsService = async (
   id: number,
+  userId: number,
   body: Partial<AirPolutionData>
 ) => {
   try {
@@ -18,6 +19,22 @@ export const updateAirPolutionsService = async (
       pm25AqiCategory,
       pm25AqiValue,
     } = body;
+
+    if (!userId) {
+      throw new Error(`User ${userId} not found`);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.role !== "ADMIN") {
+      throw new Error("User don't have access");
+    }
 
     const existingAirPolutionId = await prisma.airPolutionData.findUnique({
       where: { id },

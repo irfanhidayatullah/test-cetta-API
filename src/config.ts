@@ -12,3 +12,5 @@ export const PORT = process.env.PORT || 8000;
 export const DATABASE_URL = process.env.DATABASE_URL || "";
 export const SUPABASE_URL = process.env.SUPABASE_URL || "";
 export const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE || "";
+export const JWT_SECRET = process.env.JWT_SECRET;
+export const BASE_URL_FE = process.env.BASE_URL_FE;

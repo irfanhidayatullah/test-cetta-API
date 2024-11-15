@@ -1,5 +1,12 @@
 import { AirPolutionController } from "@/controllers/airPolution.controller";
-import { updateData } from "@/middleware/airPolutionMiddleware";
+import { adminGuard } from "@/middleware/adminGuard";
+import { verifyToken } from "@/middleware/verifyToken";
+import {
+  validateCreateAirPolutionData,
+  validateDeleteAirPolutionData,
+  validateGetAirPolutionData,
+  validateUpdateAirPolutionData,
+} from "@/validators/airPolution.validator";
 import { Router } from "express";
 
 export class AirPolutionRouter {
@@ -19,15 +26,28 @@ export class AirPolutionRouter {
     );
     this.router.post(
       "/",
+      verifyToken,
+      adminGuard,
+      validateCreateAirPolutionData,
       this.airPolutionController.createAirPolutionController
+    );
+    this.router.get(
+      "/:id",
+      validateGetAirPolutionData,
+      this.airPolutionController.getAirPolutionByIdController
     );
     this.router.delete(
       "/:id",
+      verifyToken,
+      adminGuard,
+      validateDeleteAirPolutionData,
       this.airPolutionController.deleteAirPolutionController
     );
     this.router.patch(
       "/:id",
-      updateData,
+      verifyToken,
+      adminGuard,
+      validateUpdateAirPolutionData,
       this.airPolutionController.updateAirPolutionController
     );
   }
